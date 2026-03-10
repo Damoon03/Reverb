@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(AuthManager.self) private var authManager
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if let currentUserID = authManager.currentUserID  {
+             UserProfileVIew()
+            } else {
+                LoginView()
+            }
         }
-        .padding()
+        .task {
+            await authManager.refreshUser()
+        }
     }
 }
 
 #Preview {
     ContentView()
+        .environment(AuthManager())
 }
