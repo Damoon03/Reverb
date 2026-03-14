@@ -11,7 +11,7 @@ import Supabase
 struct SuperbaseStorageManager {
     private let client: SupabaseClient
     
-    init(client: SupabaseClient) {
+    init() {
         self.client = SupabaseClient.init(
             supabaseURL: URL(string: Constants.projectURLString)!,
             supabaseKey: Constants.projectAPIKey)

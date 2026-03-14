@@ -84,7 +84,7 @@ private extension UserProfileVIew {
             guard let uiImage = UIImage(data: data) else { return }
             profileImage = Image(uiImage: uiImage)
             
-            let userProfileImageURL = try await SuperbaseStorageManager(client: <#SupabaseClient#>).uploadProfilePhoto(for: user, imageData: data)
+            let userProfileImageURL = try await SuperbaseStorageManager().uploadProfilePhoto(for: user, imageData: data)
             
             await userManager.updateProfileImageURL(userProfileImageURL)
         } catch {
@@ -96,4 +96,6 @@ private extension UserProfileVIew {
 
 #Preview {
     UserProfileVIew()
+        .environment(AuthManager())
+        .environment(UserManager())
 }

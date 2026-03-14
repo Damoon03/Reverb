@@ -11,8 +11,8 @@ struct ContentView: View {
     @Environment(AuthManager.self) private var authManager
     var body: some View {
         Group {
-            if let currentUserID = authManager.currentUserID  {
-             UserProfileVIew()
+            if authManager.currentUserID != nil  {
+             MainTabBar()
             } else {
                 LoginView()
             }
