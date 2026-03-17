@@ -9,16 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(AuthManager.self) private var authManager
+    @Environment(UserManager.self) private var userManager
+    
     var body: some View {
         Group {
             if authManager.currentUserID != nil  {
-             MainTabBar()
+                MainTabBar()
             } else {
                 LoginView()
             }
         }
-        .task {
-            await authManager.refreshUser()
+        .task { await authManager.refreshUser() }
+        .task(id:authManager.currentUserID) {
+            guard authManager.currentUserID != nil else { return }
+            await userManager.fetchCurrentUser()
         }
     }
 }
@@ -26,4 +30,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environment(AuthManager())
+        .environment(UserManager())
 }

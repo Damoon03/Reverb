@@ -8,23 +8,37 @@
 import SwiftUI
 
 struct FeedCell: View {
+    let posts: post
+    
     var body: some View {
         VStack {
             HStack(alignment: .top, spacing: 12) {
-                Image(systemName: "person.circle.fill")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 56, height: 56)
-                    .clipShape(.circle)
+                if let profileImageURL = posts.authorProfileImageURL {
+                    AsyncImage(url: URL(string: profileImageURL)!) { image in
+                        image
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 56, height: 56)
+                            .clipShape(.circle)
+                    } placeholder: {
+                        ProgressView()
+                    }
+                } else {
+                    Image(systemName: "person.circle.fill")
+                        .resizable()
+                        .frame(width: 56, height: 56)
+                        .scaledToFill()
+                        .clipShape(.circle)
+                }
                 
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text("Damoon")
+                        Text(posts.authorUsername)
                             .font(.headline)
                         
-                        Text("•" + "1 day ago")
+                        Text("•" + posts.createdAt.formatted(.relative(presentation: .named)))
                     }
-                    Text("This is a test post for now...")
+                    Text(posts.caption)
                     
                 }
                 Spacer()
@@ -36,7 +50,4 @@ struct FeedCell: View {
         }
     }
 }
-
-#Preview {
-    FeedCell()
-}
+ 

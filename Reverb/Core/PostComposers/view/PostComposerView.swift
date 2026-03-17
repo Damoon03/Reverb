@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct PostComposerView: View {
+  
     @Environment(\.dismiss) private var dismiss
+    @Environment(UserManager.self) private var  userManager
+   
     @State private var caption = ""
+    @State private var isUploading = false
     var body: some View {
         NavigationStack {
             VStack {
@@ -33,20 +37,48 @@ struct PostComposerView: View {
                         dismiss()
                     }
                 }
+                
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Post") {
-                        // upload post
-                        dismiss()
+                    if isUploading {
+                        ProgressView()
+                    } else {
+                        
+                        Button("Post") {
+                            Task {
+                                await uploadPost()
+                            }
+                        }
+                        .disabled(caption.isEmpty)
+                        .opacity(caption.isEmpty ? 0.5 : 1.0)
+                        .font(.headline)
                     }
-                    .disabled(caption.isEmpty)
-                    .opacity(caption.isEmpty ? 0.5 : 1.0)
-                    .font(.headline)
                 }
             }
         }
     }
 }
 
+private extension PostComposerView {
+    func uploadPost() async {
+        guard let  currentUser = userManager.currentUser else { return }
+        let service = CreatPostService()
+        isUploading = true
+        defer { isUploading = false }
+       
+        do {
+            try await service.creatPost(
+                caption: caption ,
+                authorID: currentUser.id,
+                authorUsername: currentUser.username,
+                authorProfileImageURL: currentUser.profileImageURL
+            )
+            dismiss()
+        } catch {
+            print("DEBUG: failed to creat post with error: \(error)")
+        }
+    }
+}
 #Preview {
     PostComposerView()
+        .environment(UserManager())
 }

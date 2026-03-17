@@ -68,7 +68,6 @@ struct UserProfileVIew: View {
             .navigationTitle("profile")
             .photosPicker(isPresented: $showPhotosPicker, selection: $selectedItem)
         }
-        .task { await userManager.fetchCurrentUser() }
         .task(id: selectedItem) {
             await onImageSelected()
         }

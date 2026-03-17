@@ -9,14 +9,16 @@ import SwiftUI
 
 struct FeedView: View {
     @State private var showPostComposer = false
+    @State private var posts = [post]()
+    private let service = FeedService()
     
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottomTrailing) {
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        ForEach(0 ..< 10) { post in
-                            FeedCell()
+                        ForEach(posts) { post in
+                            FeedCell(posts : post)
                         }
                     }
                 }
@@ -32,13 +34,23 @@ struct FeedView: View {
                 .padding()
             }
             .fullScreenCover(isPresented: $showPostComposer) {
-                Text("Post composer")
+                PostComposerView()
             } 
             .navigationTitle("Feed")
         }
+        .task { await fetchPost() }
+        .refreshable { await fetchPost() }
     }
 }
-
+private extension FeedView {
+    func fetchPost() async {
+        do {
+            self.posts = try await service.fetchPost()
+        } catch {
+            print("DEBUG: failed to fetch posts with error:\(error)")
+        }
+    }
+}
 #Preview {
     FeedView()
 }
