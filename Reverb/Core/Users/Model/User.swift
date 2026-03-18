@@ -13,4 +13,5 @@ struct User: Identifiable, Codable {
     let username: String
     let createdAt: Date
     var profileImageURL: String? = nil
+    var postCount: Int
 }

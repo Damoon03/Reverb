@@ -41,7 +41,7 @@ struct SuperbaseAuthService {
     }
     
     private func uploadUserData(with uid: String, email: String, userName: String ) async throws {
-        let user = User(id: uid, email: email, username: userName, createdAt: Date())
+        let user = User(id: uid, email: email, username: userName, createdAt: Date(), postCount: 0 )
         try await client.from("users").insert(user).execute()
     } 
 }

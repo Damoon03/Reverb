@@ -57,6 +57,15 @@ struct UserProfileVIew: View {
                         }
                     }
                 }
+                Section("Posts") {
+                    HStack {
+                        Text("Posts")
+                        
+                        Spacer()
+                        
+                        Text("\(userManager.currentUser?.postCount ?? 0)")
+                    }
+                }
                 // sign out
                 Section {
                     Button("Sign out") {
