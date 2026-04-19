@@ -21,6 +21,7 @@ struct LoginView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 150,height: 150)
+                    .cornerRadius(45)
                     .padding()
                 
                 VStack(spacing: 8) {
@@ -92,5 +93,5 @@ extension String {
 }
 #Preview {
     LoginView()
-        .environment(AuthManager() )
+        .environment(AuthManager())
 }

@@ -25,6 +25,7 @@ struct RegistrationView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 150, height: 150)
+                .cornerRadius(45)
                 .padding()
             
             VStack(spacing: 8) {
@@ -117,4 +118,6 @@ private extension RegistrationView {
 }
 #Preview {
     RegistrationView()
+        .environment(AuthManager())
+
 }
